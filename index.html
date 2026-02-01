@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدير قاعة المها | Maha Manager</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --gold: #D2A658;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text: #ffffff;
+        }
+
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            margin: 0; background: #000; color: var(--text); 
+            display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden;
+            background: radial-gradient(circle at top right, #111, #000);
+        }
+
+        header {
+            padding: 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border); text-align: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .container { padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+        /* البطاقات */
+        .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-card { 
+            background: var(--glass); backdrop-filter: blur(10px); padding: 20px; 
+            border-radius: 22px; border: 1px solid var(--glass-border); text-align: center;
+        }
+        .stat-card span { font-size: 11px; color: #b0b0b0; font-weight: bold; }
+        .stat-card h2 { color: var(--gold); margin: 10px 0 0; font-size: 18px; }
+
+        .profit-card { grid-column: span 2; background: rgba(210, 166, 88, 0.05); border-color: var(--gold); }
+
+        /* الجداول */
+        .section-title { font-size: 18px; color: var(--gold); margin: 25px 0 15px; padding-right: 10px; border-right: 3px solid var(--gold); }
+        .table-container { width: 100%; border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); background: var(--glass); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(255,255,255,0.05); padding: 15px; color: var(--gold); font-size: 13px; }
+        td { padding: 15px; text-align: center; border-bottom: 1px solid var(--glass-border); font-size: 14px; }
+		
+        /* الدعم الفني TFA7A TECH */
+        .dev-footer {
+            margin: 40px 0 20px; padding: 25px; 
+            background: rgba(210, 166, 88, 0.05); 
+            border-radius: 25px; border: 1px solid var(--glass-border);
+            text-align: center; backdrop-filter: blur(10px);
+        }
+        .dev-footer strong { color: var(--gold); font-size: 20px; letter-spacing: 4px; display: block; margin-bottom: 10px; }
+        .dev-footer p { margin: 5px 0; color: #fff; font-size: 14px; }
+        .dev-footer a { color: var(--gold); text-decoration: none; font-size: 15px; font-weight: bold; }
+        .dev-footer i { margin-left: 8px; }
+        /* أزرار وتنبيهات */
+		
+        .btn-wa { color: #25D366; font-size: 22px; }
+        .refresh-btn { position: fixed; bottom: 25px; left: 25px; width: 55px; height: 55px; border-radius: 50%; background: var(--gold); color: #000; border: none; font-size: 22px; cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.5); z-index: 1000; }
+        
+        .login-overlay { position: fixed; inset: 0; background: #000; z-index: 2000; display: flex; justify-content: center; align-items: center; }
+        .login-box { background: #111; padding: 40px; border-radius: 35px; text-align: center; border: 1px solid var(--gold); width: 90%; max-width: 360px; }
+        input { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #333; background: #222; color: #fff; margin-bottom: 20px; text-align: center; font-size: 18px; outline: none; }
+        input:focus { border-color: var(--gold); }
+
+        /* التقويم المصغر */
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border-radius: 8px; font-size: 12px; }
+        .cal-day.booked { background: var(--gold); color: #000; font-weight: bold; }
+
+        .btn-wa { color: #25D366; font-size: 20px; text-decoration: none; }
+        
+        .refresh-btn { 
+            position: fixed; bottom: 20px; left: 20px; 
+            width: 50px; height: 50px; border-radius: 25px; 
+            background: var(--gold); color: #000; border: none; 
+            font-size: 20px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .login-overlay { position: fixed; inset: 0; background: #000; z-index: 1000; display: flex; justify-content: center; align-items: center; }
+        .login-box { background: #111; padding: 40px; border-radius: 30px; text-align: center; border: 1px solid var(--gold); width: 90%; max-width: 350px; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333; background: #222; color: #fff; margin-bottom: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<!-- شاشة دخول المدير الممركزة تماماً -->
+<div id="managerLogin" class="login-overlay" style="display: flex; justify-content: center; align-items: center; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; backdrop-filter: blur(15px);">
+    <div class="login-box" style="display: flex; flex-direction: column; align-items: center; text-align: center; width: 90%; max-width: 400px; padding: 40px; background: rgba(255,255,255,0.03); border: 1px solid var(--gold); border-radius: 30px;">
+        
+        <!-- الأيقونة -->
+        <i class="fas fa-user-tie" style="font-size: 60px; color: var(--gold); margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--gold-glow));"></i>
+        
+        <!-- العنوان -->
+        <h2 style="color: var(--gold); margin: 0 0 25px 0; font-size: 24px; letter-spacing: 1px;">دخول المدير</h2>
+        
+        <!-- حقل كلمة المرور -->
+        <input type="password" id="managerPass" placeholder="كلمة مرور المدير" 
+               style="width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333; background: rgba(255,255,255,0.05); color: #fff; margin-bottom: 20px; text-align: center; font-size: 18px; outline: none; color-scheme: dark;">
+        
+        <!-- الزر -->
+        <button onclick="checkManagerPass()" 
+                style="width: 80%; padding: 15px; border-radius: 15px; border: none; background: var(--gold); color: #000; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px rgba(210,166,88,0.2);">
+            دخول للمنظومة
+        </button>
+        
+    </div>
+</div>
+
+    <header>
+        <div style="color: var(--gold); font-weight: bold; font-size: 20px;">قاعة المها - الإدارة</div>
+    </header>
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card"><span>الحجوزات</span><h2 id="mTotal">0</h2></div>
+            <div class="stat-card"><span>الواصل</span><h2 id="mRev">0</h2></div>
+            <div class="stat-card"><span>المصاريف</span><h2 id="mExp" style="color: #FF453A;">0</h2></div>
+            <div class="stat-card profit-card"><span>صافي الربح</span><h2 id="mProfit" style="color: #32D74B; font-size: 24px;">0</h2></div>
+        </div>
+
+        <div class="section-title">تقويم الشهر الحالي</div>
+        <div class="glass-box" style="background: var(--glass); padding: 15px; border-radius: 20px;">
+            <div id="mCalendar" class="cal-grid"></div>
+        </div>
+
+        <div class="section-title">سجل الحجوزات الأخيرة</div>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>المستأجر</th><th>التاريخ</th><th>المتبقي</th><th>واتساب</th></tr></thead>
+                <tbody id="mTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <button class="refresh-btn" onclick="fetchManagerData()"><i class="fas fa-sync-alt"></i></button>
+        <!-- قسم الدعم الفني TFA7A TECH -->
+        <div class="dev-footer">
+            <strong>TFA7A TECH</strong>
+            <p>للدعم الفني والبرمجي</p>
+            <p style="font-weight: bold; font-size: 18px; margin: 10px 0;">07825588999</p>
+            <a href="https://www.instagram.com/tf.2z/" target="_blank">
+                <i class="fab fa-instagram"></i> Follow us: @tf.2z
+            </a>
+        </div>
+    </div>
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxV2KsvclE0Rrm53K0TBwjU3Q2KQ1wYGbJ-Qg947CWZleIqMl4J5yLQgs47Nge0g37M/exec';
+    let db = { bookings: [], expenses: [] };
+
+    function formatIQD(v) { return Number(v).toLocaleString() + " د.ع"; }
+
+    function checkManagerPass() {
+        if(document.getElementById('managerPass').value === "1959") { // كلمة مرور خاصة للمدير
+            document.getElementById('managerLogin').style.display = 'none';
+            fetchManagerData();
+        } else alert("خطأ!");
+    }
+
+    function fetchManagerData() {
+        document.querySelector('.refresh-btn i').classList.add('fa-spin');
+        fetch(scriptURL).then(res => res.json()).then(data => {
+            db = data;
+            updateManagerUI();
+            drawManagerCalendar();
+            document.querySelector('.refresh-btn i').classList.remove('fa-spin');
+        });
+    }
+
+    function updateManagerUI() {
+        let b = db.bookings, e = db.expenses;
+        let rev = b.reduce((s,r)=>s+(Number(r.tb7)||0),0);
+        let exp = e.reduce((s,r)=>s+(Number(r.amount)||0),0);
+        
+        document.getElementById('mTotal').innerText = b.length;
+        document.getElementById('mRev').innerText = formatIQD(rev);
+        document.getElementById('mExp').innerText = formatIQD(exp);
+        document.getElementById('mProfit').innerText = formatIQD(rev - exp);
+
+        document.getElementById('mTable').innerHTML = b.slice(-10).map(r => `
+            <tr>
+                <td style="text-align: right;">${r.tb1}</td>
+                <td>${r.tb2 ? r.tb2.split('T')[0].substring(5) : '-'}</td>
+                <td style="color:${r.tb8>0?'red':'#32D74B'}">${formatIQD(r.tb8)}</td>
+                <td><a href="https://wa.me/${r.tb6}" class="btn-wa" target="_blank"><i class="fab fa-whatsapp"></i></a></td>
+            </tr>
+        `).reverse().join('');
+    }
+
+    function drawManagerCalendar() {
+        const grid = document.getElementById('mCalendar');
+        grid.innerHTML = '';
+        const now = new Date();
+        const days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        for (let d = 1; d <= days; d++) {
+            let s = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            let booked = db.bookings.some(x => x.tb2.startsWith(s));
+            grid.innerHTML += `<div class="cal-day ${booked?'booked':''}">${d}</div>`;
+        }
+    }
+</script>
+</body>
+</html>
