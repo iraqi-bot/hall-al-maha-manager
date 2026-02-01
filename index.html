@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- إجبار المتصفح على الوضع الداكن ومنع الخلفية البيضاء -->
+    <meta name="theme-color" content="#000000">
+    <meta name="color-scheme" content="dark">
     <title>مدير قاعة المها | Maha Manager</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
@@ -18,17 +21,26 @@
             --text: #ffffff;
         }
 
-        * { box-sizing: border-box; }
+        /* منع أي ظهور للون الأبيض نهائياً */
+        html {
+            background-color: #000000 !important;
+        }
 
         body { 
             font-family: 'Tajawal', sans-serif; 
-            margin: 0; background: #000; color: var(--text); 
-            display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden;
-            background: radial-gradient(circle at top right, #111, #000);
+            margin: 0; 
+            background-color: #000000 !important; /* لون أسود صريح */
+            background-image: radial-gradient(circle at top right, #111, #000) !important;
+            background-attachment: fixed;
+            color: var(--text); 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* الخلفية المتحركة */
+        /* الدائرة الذهبية المتحركة */
         body::before {
             content: ""; position: absolute; width: 300px; height: 300px;
             background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
@@ -38,44 +50,34 @@
         @keyframes fluidMove { from { transform: translate(0, 0); } to { transform: translate(100px, 100px); } }
 
         header {
-            padding: 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(20px);
+            padding: 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border); text-align: center;
             position: sticky; top: 0; z-index: 100;
         }
 
-        .container { 
-            padding: 15px; 
-            max-width: 800px; /* العرض المثالي للمدير على الموبايل والتابلت */
-            margin: 0 auto; 
-            width: 100%; 
-        }
+        .container { padding: 15px; max-width: 800px; margin: 0 auto; width: 100%; }
 
-        /* البطاقات الإحصائية */
         .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
         .stat-card { 
             background: var(--glass); backdrop-filter: blur(10px); padding: 15px 10px; 
             border-radius: 20px; border: 1px solid var(--glass-border); text-align: center;
         }
         .stat-card span { font-size: 11px; color: #b0b0b0; font-weight: bold; display: block; margin-bottom: 5px; }
-        .stat-card h2 { color: var(--gold); margin: 0; font-size: 16px; word-break: break-word; }
+        .stat-card h2 { color: var(--gold); margin: 0; font-size: 16px; }
 
         .profit-card { grid-column: span 2; background: rgba(210, 166, 88, 0.05); border-color: var(--gold); padding: 20px 10px; }
         .profit-card h2 { font-size: 22px; }
 
-        /* العناوين */
         .section-title { font-size: 17px; color: var(--gold); margin: 25px 0 15px; padding-right: 10px; border-right: 3px solid var(--gold); font-weight: bold; }
 
-        /* الجداول - تمرير جانبي للموبايل */
         .table-container { 
             width: 100%; border-radius: 20px; overflow-x: auto; 
             border: 1px solid var(--glass-border); background: var(--glass); 
-            -webkit-overflow-scrolling: touch;
         }
         table { width: 100%; border-collapse: collapse; min-width: 400px; }
         th { background: rgba(255,255,255,0.05); padding: 15px 10px; color: var(--gold); font-size: 13px; }
         td { padding: 15px 10px; text-align: center; border-bottom: 1px solid var(--glass-border); font-size: 14px; }
 		
-        /* الدعم الفني TFA7A TECH */
         .dev-footer {
             margin: 40px 0 20px; padding: 25px; 
             background: rgba(210, 166, 88, 0.05); 
@@ -86,17 +88,17 @@
         .dev-footer p { margin: 5px 0; color: #fff; font-size: 14px; }
         .dev-footer a { color: var(--gold); text-decoration: none; font-size: 15px; font-weight: bold; }
 
-        /* أزرار وتنبيهات */
         .btn-wa { color: #25D366; font-size: 22px; text-decoration: none; }
         .refresh-btn { 
-            position: fixed; bottom: 25px; left: 25px; 
-            width: 55px; height: 55px; border-radius: 50%; 
-            background: var(--gold); color: #000; border: none; 
+            position: fixed; bottom: 25px; left: 25px; width: 55px; height: 55px; 
+            border-radius: 50%; background: var(--gold); color: #000; border: none; 
             font-size: 22px; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 1000; 
         }
         
-        /* شاشة الدخول */
-        .login-overlay { position: fixed; inset: 0; background: #000; z-index: 2000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(15px); }
+        .login-overlay { 
+            position: fixed; inset: 0; background: #000 !important; 
+            z-index: 2000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(15px); 
+        }
         .login-box { 
             display: flex; flex-direction: column; align-items: center; text-align: center;
             background: #111; padding: 35px 25px; border-radius: 30px; border: 1px solid var(--gold); 
@@ -108,24 +110,16 @@
             font-size: 18px; outline: none; -webkit-appearance: none;
         }
 
-        /* التقويم المنسق للموبايل */
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
         .cal-day { 
-            aspect-ratio: 1 / 1; 
-            display: flex; align-items: center; justify-content: center; 
-            background: rgba(255,255,255,0.03); border-radius: 8px; 
-            font-size: 12px; border: 1px solid var(--glass-border);
+            aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
+            background: rgba(255,255,255,0.03); border-radius: 8px; font-size: 12px; border: 1px solid var(--glass-border);
         }
-        .cal-day.booked { 
-            background: var(--gold); color: #000; font-weight: bold; 
-            box-shadow: 0 0 10px rgba(210,166,88,0.3); border-color: var(--gold); 
-        }
-
+        .cal-day.booked { background: var(--gold); color: #000; font-weight: bold; border-color: var(--gold); }
     </style>
 </head>
 <body>
 
-<!-- شاشة الدخول -->
 <div id="managerLogin" class="login-overlay">
     <div class="login-box">
         <i class="fas fa-user-tie" style="font-size: 60px; color: var(--gold); margin-bottom: 20px;"></i>
@@ -142,7 +136,6 @@
     </header>
 
     <div class="container">
-        <!-- الإحصائيات -->
         <div class="stats">
             <div class="stat-card"><span>الحجوزات</span><h2 id="mTotal">0</h2></div>
             <div class="stat-card"><span>الواصل</span><h2 id="mRev">0</h2></div>
@@ -158,23 +151,21 @@
         <div class="section-title">سجل الحجوزات الأخيرة</div>
         <div class="table-container">
             <table>
-                <thead><tr><th style="text-align: right;">المستأجر</th><th>التاريخ</th><th>المتبقي</th><th><i class="fab fa-whatsapp"></i></th></tr></thead>
+                <thead><tr><th style="text-align: right;">المستأجر</th><th>التاريخ</th><th>المتبقي</th><th>واتس اب</th></tr></thead>
                 <tbody id="mTable"></tbody>
             </table>
         </div>
 
-        <!-- الدعم الفني -->
         <div class="dev-footer">
             <strong>TFA7A TECH</strong>
             <p>للدعم الفني والبرمجي</p>
             <p style="font-weight: bold; font-size: 18px; margin: 10px 0;">07825588999</p>
             <a href="https://www.instagram.com/tf.2z/" target="_blank">
-                <i class="fab fa-instagram"></i> Follow us: @tf.2z
+                <i class="fab fa-instagram"></i> @tf.2z
             </a>
         </div>
     </div>
 
-    <!-- زر التحديث العائم -->
     <button class="refresh-btn" onclick="fetchManagerData()"><i class="fas fa-sync-alt"></i></button>
 
 <script>
@@ -223,17 +214,40 @@
         `).reverse().join('');
     }
 
-    function drawManagerCalendar() {
-        const grid = document.getElementById('mCalendar');
-        grid.innerHTML = '';
-        const now = new Date();
-        const days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-        for (let d = 1; d <= days; d++) {
-            let s = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            let booked = db.bookings.some(x => x.tb2 && x.tb2.startsWith(s));
-            grid.innerHTML += `<div class="cal-day ${booked?'booked':''}">${d}</div>`;
-        }
+function drawManagerCalendar() {
+    const grid = document.getElementById('mCalendar');
+    grid.innerHTML = '';
+    
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); // الشهر الحالي (0-11)
+
+    // حساب عدد الأيام في الشهر والسنة المحددة
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        // تكوين التاريخ الكامل بصيغة YYYY-MM-DD للمقارنة
+        let currentDayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        
+        // البحث عن حجز يطابق هذا التاريخ الكامل (يوم وشهر وسنة)
+        let isBooked = db.bookings.some(x => {
+            if (!x.tb2) return false;
+            // التأكد من أخذ تاريخ الحجز فقط بدون الوقت
+            let bookingDate = x.tb2.includes('T') ? x.tb2.split('T')[0] : x.tb2;
+            return bookingDate === currentDayStr;
+        });
+
+        // إضافة اليوم للشبكة مع تمييز المحجوز
+        grid.innerHTML += `<div class="cal-day ${isBooked ? 'booked' : ''}">${d}</div>`;
     }
+    
+    // اختياري: تحديث عنوان التقويم ليظهر الشهر والسنة بالكامل
+    const titleArea = document.querySelector('.section-title');
+    if(titleArea) {
+        const monthNames = ["كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول"];
+        titleArea.innerText = `تقويم شهر ${monthNames[month]} لسنة ${year}`;
+    }
+}
 </script>
 </body>
 </html>
